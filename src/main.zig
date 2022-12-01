@@ -1,5 +1,7 @@
-const d0120 = @import("./days/day1_20.zig");
+const aid = @import("./aidingfunctions.zig");
+const d01 = @import("./days/day01.zig");
 
 pub fn main() void {
-    d0120.solveDay();
+    //d01.solveDay();
+    aid.benchmarkDay(&d01.solveDay, 1000);
 }
