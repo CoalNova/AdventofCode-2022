@@ -1,37 +1,46 @@
 const std = @import("std");
 const aid = @import("../aidingfunctions.zig");
+const day = @embedFile("../dayinputs/day02_input.txt");
+
+const hand_lut = [_]u32{
+    3 + 1, //0b00_00
+    6 + 2, //0b00_01
+    0 + 3, //0b00_10
+    0, //0b00_11 unused
+    0 + 1, //0b01_00
+    3 + 2, //0b01_01
+    6 + 3, //0b01_10
+    0, //0b01_11 unused
+    6 + 1, //0b10_00
+    0 + 2, //0b10_01
+    3 + 3, //0b10_10
+};
+
+const outcome_lut = [_]u32{
+    0 + 3, //0b00_00
+    3 + 1, //0b00_01
+    6 + 2, //0b00_10
+    0, //0b00_11 unused
+    0 + 1, //0b01_00
+    3 + 2, //0b01_01
+    6 + 3, //0b01_10
+    0, //0b01_11 unused
+    0 + 2, //0b10_00
+    3 + 3, //0b10_01
+    6 + 1, //0b10_10
+};
 
 pub fn solveDay(print_output: bool) void {
-    var inputs = aid.loadFile("./dayinputs/day02_input.txt") catch |err| return std.debug.print("{!}\n", .{err});
-    defer aid.allocator.free(inputs);
+    //var inputs = aid.loadFile("./dayinputs/day01_input.txt") catch |err| return std.debug.print("{!}\n", .{err});
+    //defer aid.allocator.free(inputs);
 
-    var hand1: i16 = 0;
-    var hand2: i16 = 0;
     var part_one_score: u32 = 0;
     var part_two_score: u32 = 0;
-    var part_two_hand: i64 = 0;
 
     var index: usize = 0;
-    while (index < inputs.len) : (index += 4) {
-        //ascii value of A-C is 65-67
-        hand1 = inputs[index] - 65;
-
-        //ascii value of X-Z is 88-90
-        hand2 = inputs[index + 2] - 88;
-
-        //part one, get played hand and score against own hand
-        //3 times a boolean match to get a draw scenario
-        //6 multiplied by either the obvious win, or the rounded edge case
-        part_one_score += @intCast(u32, hand2 + 1) + 3 * @intCast(u32, @boolToInt(hand1 == hand2)) +
-            6 * @intCast(u32, @boolToInt(hand2 - hand1 == 1)) +
-            6 * @intCast(u32, @boolToInt(hand1 == 2 and hand2 == 0));
-
-        //calculate what the required hand is needed to reach provided outcome
-        //selectively force values for edge cases
-        part_two_hand = @intCast(i64, hand1 + 1 + hand2 - 1 + @as(i64, 3) * @boolToInt(hand1 + hand2 == 0) - @as(i64, 3) * @boolToInt(hand1 + hand2 == 4));
-
-        //multiply 3 by the required game outcome and add the required hand
-        part_two_score += 3 * @intCast(u32, hand2) + @intCast(u32, part_two_hand);
+    while (index < day.len) : (index += 4) {
+        part_one_score += hand_lut[@intCast(usize, ((day[index] - 65) << 2) + (day[index + 2] - 88))];
+        part_two_score += outcome_lut[@intCast(usize, ((day[index] - 65) << 2) + (day[index + 2] - 88))];
     }
 
     if (print_output)
