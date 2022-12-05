@@ -11,9 +11,9 @@ pub fn solveDay(print_output: bool) void {
     var raw_calories = std.mem.split(u8, day, "\n");
 
     while (raw_calories.next()) |raw| {
+        
         calories = 0;
-        for (raw) |char| calories = calories * 10 + (char - 48);
-        if (calories < 1) {
+        if (raw.len < 1) {        
             for (greatest) |g, i|
                 if (sum > g) {
                     greatest[i] = sum;
@@ -22,7 +22,10 @@ pub fn solveDay(print_output: bool) void {
 
             max = if (sum > max) sum else max;
             sum = 0;
-        } else sum += calories;
+        } else {
+            for (raw) |char| calories = calories * 10 + (char - 48);
+            sum += calories;
+        }
     }
     if (print_output)
         aid.printResult(1, max, greatest[0] + greatest[1] + greatest[2]) catch |err| return std.debug.print("{!}", .{err});
