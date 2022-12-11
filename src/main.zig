@@ -6,6 +6,7 @@ const d03 = @import("./days/day03.zig");
 const d04 = @import("./days/day04.zig");
 const d05 = @import("./days/day05.zig");
 const d06 = @import("./days/day06.zig");
+const d08 = @import("./days/day08.zig");
 
 pub fn main() !void {
     var args: [][]u8 = try std.process.argsAlloc(aid.allocator);
@@ -17,6 +18,7 @@ pub fn main() !void {
     d04.solveDay(true);
     d05.solveDay(true);
     d06.solveDay(true);
+    d08.solveDay(true);
 
     if (args.len > 1) {
         var test_times: u32 = 0;
@@ -31,5 +33,6 @@ pub fn main() !void {
         aid.benchmarkDay(4, &d04.solveDay, test_times);
         aid.benchmarkDay(5, &d05.solveDay, test_times);
         aid.benchmarkDay(6, &d06.solveDay, test_times);
+        aid.benchmarkDay(8, &d08.solveDay, test_times);
     }
 }

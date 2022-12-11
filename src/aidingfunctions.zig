@@ -58,7 +58,7 @@ pub fn benchmarkDay(day: u8, day_solution: *const fn (bool) void, reps: u32) voi
 
     avg = avg / reps;
 
-    stdout.print("\nDay {d} total average time over {d} repetitions: {d} ms\n", .{ day, reps, @intToFloat(f32, avg) / @intToFloat(f32, time.ns_per_ms) }) catch |err| return std.debug.print("{!}", .{err});
-    stdout.print("  Longest time: {d} ms, shortest time: {d} ms\n", .{ @intToFloat(f32, upr) / @intToFloat(f32, time.ns_per_ms), @intToFloat(f32, lwr) / @intToFloat(f32, time.ns_per_ms) }) catch |err| return std.debug.print("{!}", .{err});
+    stdout.print("\nDay {d} total average time over {d} repetitions: {d} us\n", .{ day, reps, @intToFloat(f32, avg) / @intToFloat(f32, time.ns_per_us) }) catch |err| return std.debug.print("{!}", .{err});
+    stdout.print("  Longest time: {d} us, shortest time: {d} us\n", .{ @intToFloat(f32, upr) / @intToFloat(f32, time.ns_per_us), @intToFloat(f32, lwr) / @intToFloat(f32, time.ns_per_us) }) catch |err| return std.debug.print("{!}", .{err});
     bw.flush() catch |err| std.debug.print("{!}", .{err});
 }

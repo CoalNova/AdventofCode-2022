@@ -31,17 +31,22 @@ const outcome_lut = [_]u32{
 };
 
 pub fn solveDay(print_output: bool) void {
-    //var inputs = aid.loadFile("./dayinputs/day01_input.txt") catch |err| return std.debug.print("{!}\n", .{err});
-    //defer aid.allocator.free(inputs);
-
+    
     var part_one_score: u32 = 0;
     var part_two_score: u32 = 0;
 
-    var index: usize = 0;
-    while (index < day.len) : (index += 4) {
-        part_one_score += hand_lut[@intCast(usize, ((day[index] - 65) << 2) + (day[index + 2] - 88))];
-        part_two_score += outcome_lut[@intCast(usize, ((day[index] - 65) << 2) + (day[index + 2] - 88))];
-    }
+    @setEvalBranchQuota(day.len * 10);
+
+    comptime inline for(day) |char, index| {
+        if ((index & 3) == 0) 
+            part_one_score += hand_lut[@intCast(usize, ((char - 65) << 2) + (day[index + 2] - 88))];
+    };
+
+    comptime inline for(day) |char, index| 
+    {
+        if ((index & 3) == 0) 
+            part_two_score += outcome_lut[@intCast(usize, ((char - 65) << 2) + (day[index + 2] - 88))];
+    };
 
     if (print_output)
         aid.printResult(2, part_one_score, part_two_score) catch |err| return std.debug.print("{!}\n", .{err});
